@@ -1,11 +1,21 @@
 
 
+<% if(errors.length > 0 ){ %>
+<p>Hey, It seems that email is already exits </p>
+<% }%>
+
+
+<% if(errors.length = 0 ){ %>
+
+<p>New user successfully created! </p>
+<%  }%>
+
 
 <form method="post">
 
-name:<input type="text" name="name">
+name:<input type="text" name="name" required>
 Email:<input type="email" name="email">
-Password:<input type="passwors" name="password" placeholder="password">
+Password:<input type="password" name="password" placeholder="password">
 <input type="submit" value="Submit">
 
 </form>

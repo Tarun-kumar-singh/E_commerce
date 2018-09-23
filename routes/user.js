@@ -3,7 +3,9 @@ const User = require('../modals/user');
 
 
 router.get('/signup',function(req,res,next){
-res.render('create-account/signup');
+res.render('create-account/signup',{
+    errors: req.flash('errors')
+});
 });
 
 router.post('/signup',function(req,res){
@@ -14,16 +16,16 @@ user.password = req.body.password;
 
 User.findOne({ email:req.body.email}, function(err,existingUser){
 	if(existingUser){
-		console.log(req.body.email + " is aalready exist ");
-         
-        res.redirect('/signup');
-       return;
-	}
+		 req.flash('errors','Email already exist ');
+      return res.redirect('/signup');
+       }
     else{
     	user.save(function(err,user){
     		if(err) return next(err);
-    		res.json("New user created ");
-    	});
+    		
+            return res.redirect('/signup');
+
+             });
     }
 });
 });
