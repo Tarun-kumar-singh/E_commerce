@@ -32,7 +32,7 @@ bcrypt.genSalt(10,function(err,salt){
 });
 });
 
-userschema.methods.comparePassword= function(password){
+userschema.methods.comparePassword = function(password){
   return bcrypt.compareSync(password,this.password);
 }
 

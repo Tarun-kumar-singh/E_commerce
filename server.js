@@ -8,21 +8,16 @@ var session = require('express-session');
 var cookieParser = require('cookie-Parser');
 var flash = require('express-flash');
 var MongoStore = require('connect-mongo')(session);
-
+var passport = require('passport');
 
 var app = express();
 
-var secret = require('./config/secret.js'); 
+var secret =  require('./config/secret');
 var User = require('./modals/user');
-
-
-mongoose.connect('secert.database',function(err){
-if(err)
-	console.log(err);
-else{
-	console.log("Connected to database ");
-}
-});
+ 
+mongoose.connect(secret.database, { useNewUrlParser: true })
+ .then(() => console.log('Connected to MongooDB...'))
+  .catch(err => console.error('Could not connect to MongoDB..',err));
 
 //Middleware
 app.use(morgan('dev'));//Way to use the mogan middleware
@@ -32,8 +27,8 @@ app.engine('ejs',engine);
 app.use(session({ 
 	resave:true,
 	saveUninitialized:true,
-    secret:secret.secretKey
-	//store:new MongoStore({ url: secret.database, autoReconnect:true})
+    secret:secret.secretKey,
+	store: new MongoStore({ url: secret.database, autoReconnect:true})
 	 }));
 app.use(cookieParser());
 app.use(flash());
@@ -49,6 +44,5 @@ app.use(userRoutes);
 
 app.listen(secret.port,function(err){
 if(err) console.error(err);
-console.log("Server is running on port ..."+secret.port
-	);
+console.log("Server is running on port..." + secret.port);
 });
